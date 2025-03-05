@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="MySuite">
+    <test name="MyTests">
+        <classes>
+            <class name="com.aryan.DatabaseConnectionTest" />
+            <class name="com.aryan.SignupServletTest" />
+            <class name="com.aryan.LoginServletTest" />
+            <class name="com.aryan.TestRunner"/>
+            <!-- Add more test classes here -->
+        </classes>
+    </test>
+</suite>
