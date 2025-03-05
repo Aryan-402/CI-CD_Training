@@ -27,28 +27,33 @@ pipeline {
             }
         }
         
-        stage('Deploy') {
-            steps {
-                script {
-                    // Set Tomcat path - Update if Tomcat is installed in a different location
-                    def TOMCAT_HOME = 'C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0'
-                    
-                    // Ensure the target WAR file exists before copying
-                    bat """
-                        if exist target\\UserAuthWeb-1.0-SNAPSHOT.war (
-                            echo Deploying WAR file...
-                            xcopy /Y target\\UserAuthWeb-1.0-SNAPSHOT.war \"${TOMCAT_HOME}\\webapps\"
-                        ) else (
-                            echo WAR file not found! Build may have failed.
-                            exit /b 1
-                        )
-                    """
+       stage('Deploy') {
+    steps {
+        script {
+            // Set Tomcat path - Update if Tomcat is installed in a different location
+            def TOMCAT_HOME = 'C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0'
 
-                    // Start Tomcat Server - Ensure Tomcat is installed properly
-                    bat "\"${TOMCAT_HOME}\\bin\\startup.bat\""
-                }
-            }
+            // Ensure the target WAR file exists before copying
+            bat """
+                if exist target\\UserAuthWeb-1.0-SNAPSHOT.war (
+                    echo Deploying WAR file...
+                    xcopy /Y target\\UserAuthWeb-1.0-SNAPSHOT.war \"${TOMCAT_HOME}\\webapps\"
+                ) else (
+                    echo WAR file not found! Build may have failed.
+                    exit /b 1
+                )
+            """
+
+            // Set CATALINA_HOME and Start Tomcat
+            bat """
+                set CATALINA_HOME=${TOMCAT_HOME}
+                echo CATALINA_HOME set to %CATALINA_HOME%
+                "%CATALINA_HOME%\\bin\\startup.bat"
+            """
         }
+    }
+}
+
         
         stage('Send Email') {
             steps {
